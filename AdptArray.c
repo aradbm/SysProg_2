@@ -53,7 +53,7 @@ Result SetAdptArrayAt(PAdptArray p_arr, int index, PElement elem)
         for (size_t i = 0; i < p_arr->size; i++)
         {
             if (p_arr->element_array[i] != NULL)
-                new_arr[i] = p_arr->copy(p_arr->element_array[i]);
+                new_arr[i] = (p_arr->element_array[i]);
         }
         free(p_arr->element_array);
         p_arr->element_array = new_arr;
