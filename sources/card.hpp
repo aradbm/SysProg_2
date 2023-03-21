@@ -1,3 +1,5 @@
+#ifndef CARD_H
+#define CARD_H
 namespace ariel
 {
     class Card
@@ -5,4 +7,5 @@ namespace ariel
     public:
         Card();
     };
-}
+};
+#endif

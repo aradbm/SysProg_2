@@ -1,3 +1,6 @@
+#ifndef GAME_H
+#define GAME_H
+
 #include "player.hpp"
 
 namespace ariel
@@ -16,4 +19,6 @@ namespace ariel
         void printLog();
         void printStats();
     };
-}
+};
+
+#endif

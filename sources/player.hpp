@@ -1,3 +1,6 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include <iostream>
 using namespace std;
 namespace ariel
@@ -7,8 +10,10 @@ namespace ariel
         string name;
 
     public:
+        Player();
         Player(string name);
         int stacksize();
         int cardesTaken();
     };
-}
+};
+#endif
