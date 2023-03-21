@@ -1,8 +1,8 @@
 namespace ariel
 {
-
-    class card
+    class Card
     {
+    public:
+        Card();
     };
-
 }

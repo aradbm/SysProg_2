@@ -1,3 +1,5 @@
+#include "player.hpp"
+
 namespace ariel
 {
     class Game
