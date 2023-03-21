@@ -1,0 +1,8 @@
+namespace ariel
+{
+
+    class card
+    {
+    };
+
+}
