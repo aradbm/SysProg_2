@@ -11,6 +11,7 @@ namespace ariel
 
     public:
         Player();
+        ~Player();
         Player(string name);
         int stacksize();
         int cardesTaken();

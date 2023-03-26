@@ -5,6 +5,9 @@ using namespace ariel;
 Player::Player()
 {
 }
+Player::~Player()
+{
+}
 Player::Player(string name)
 {
 }

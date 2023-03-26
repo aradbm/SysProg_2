@@ -4,9 +4,10 @@
 using namespace ariel;
 using namespace std;
 
-Game::Game(Player p1, Player p2)
+Game::Game(Player player1, Player player2)
 {
 }
+Game::~Game() {}
 void Game::playAll()
 {
 }
