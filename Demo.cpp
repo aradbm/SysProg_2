@@ -11,28 +11,27 @@
 #include <stdexcept>
 using namespace std;
 
-#include "sources/player.hpp"
-#include "sources/game.hpp"
-#include "sources/card.hpp"
+#include "sources/Fraction.hpp"
+
 using namespace ariel;
 
-int main()
-{
-  // Create two players with their names
-  Player p1("Alice");
-  Player p2("Bob");
-  Game game(p1, p2);
-  for (int i = 0; i < 5; i++)
-  {
-    game.playTurn();
-  }
-  game.printLastTurn();             // print the last turn stats. For example:
-                                    // Alice played Queen of Hearts Bob played 5 of Spades. Alice wins.
-                                    // Alice played 6 of Hearts Bob played 6 of Spades. Draw. Alice played 10 of Clubs Bob played 10 of Diamonds. draw. Alice played Jack of Clubs Bob played King of Diamonds. Bob wins.
-  cout << p1.stacksize() << endl;   // prints the amount of cards left. should be 21 but can be less if a draw was played
-  cout << p2.cardesTaken() << endl; // prints the amount of cards this player has won.
-  game.playAll();                   // playes the game untill the end
-  game.printWiner();                // prints the name of the winning player
-  game.printLog();                  // prints all the turns played one line per turn (same format as game.printLastTurn())
-  game.printStats();                // for each player prints basic statistics: win rate, cards won, <other stats you want to print>. Also print the draw rate and amount of draws that happand. (draw within a draw counts as 2 draws. )
+
+int main() {
+    Fraction a(5,3), b(14,21);
+    cout << "a: " << a << "b: " << b << endl;
+    cout << "a+b" << a+b << endl; 
+    cout << "a-b" << a-b << endl; 
+    cout << "a/b" << a/b << endl; 
+    cout << "a*b" << a*b << endl; 
+    cout << "2.3*b" << 2.3*b << endl; 
+    cout << "a+2.421" << a+2.421 << endl; 
+    Fraction c = a+b-1;
+    cout << c++ << endl;
+    cout << --c << endl;
+
+    cout << "c >=b ? : " << c >= b << endl;
+    if (a > 1.1) cout << " a is bigger than 1.1" << endl;
+    else cout << " a is smaller than 1.1" << endl;
+
+
 }

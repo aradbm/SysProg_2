@@ -1,17 +1,22 @@
-<div dir="rtl" lang="he">
+<div dir="rtl" lang="en">
 
-# מלחמה
-במטלה זו נממש את משחק הקלפים מלחמה עבור שני שחקנים. 
-יש חפיסת קלפים רגיל עם 52 קלפים בתחילת המשחק החפיסה מעורבבת (בצורה ראנדומאלית) ומחולקת שווה בשווה בין שני השחקנים.
-בכל תור השחקנים שולפים קלף אחד מראש הערימה שלהם השחקן עם הקלף הגבוהה ביותר לוקח את שני הקלפים אליו (2 מנצח אס).
-אם השחקנים שלפו שני קלפים זהים אז הם מניחים קלף אחד הפוך ומעליו קלף פחות. השחק עם הקלף הגבוהה לוקח את כל ששת הקלפים. במידה ושוב יש תיקו ממשיכים עם קלף סגור ואחריו קלף פתוח עד שאחד השחקנים מנצח. התור נמשך עד שאחד השחקנים לוקח את הקופה או שנגמרים הקלפים. 
-אם נגמרים הקלפים תוך כדי השובר שיוויון כל שחקן לוקח את הקלפים שהוא זרק (מתחלקים בקופה חצי חצי).
-המשחק נמשך עד שנגמרים לשחקנים הקלפים והמנצח הוא השחקן שלקח לעצמו את מירב הקלפים. 
+# Fraction
+Write a class named Fraction that represents a fraction of two integers. Overload the following operators for this class:
+
+* The + operator to add two fractions and return their sum as another fraction in reduced form.
+* The - operator to subtract two fractions and return their difference as another fraction in reduced form.
+* The * operator to multiply two fractions and return their product as another fraction in reduced form.
+* The / operator to divide two fractions and return their quotient as another fraction in reduced form.
+* The == operator to compare two fractions for equality and return true or false.
+* All comparison operations (>,<,>=,<=)
+* The ++ and -- operator that adds (or substracts) 1 to the fraction. implement both pre and post fix.
+* The << operator to print a fraction to an output stream in the format “numerator/denominator”.
+* The >> operator to read a fraction from an input stream by taking two integers as input. 
+* All operators should work on both sides on fractions and floats type variables. on a float var you need use up to 3 digits beyond the desimal point for acuracy.  
 
 דוגמאות לפעולת המחלקה ניתן למצוא ב-[Demo.cpp](Demo.cpp).
 
-בשלב א עליכם לכתוב כותרות ובדיקות-יחידה מקיפות.
-חישבו על המחלקות שתבנו ומה כל מחלקה צריכה להכיל. אין צורך בירושה. 
+בשלב א עליכם לכתוב כותרות ובדיקות-יחידה מקיפות. 
 
 כיתבו את כל הקבצים הדרושים כך שהפקודות הבאות יעבדו ללא שגיאות:
 
