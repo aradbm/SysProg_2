@@ -10,7 +10,8 @@ SOURCES=AdptArray.c book.c Person.c
 
 run: demo
 	./$^
-
+main: main.o $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $^ -o main
 mem_test: demo
 	valgrind ./$^
 
@@ -21,4 +22,4 @@ demo: Demo.o $(OBJECTS)
 	$(CXX) $(CXXFLAGS) --compile $< -o $@
 
 clean:
-	rm -f *.o demo
+	rm -f *.o demo main

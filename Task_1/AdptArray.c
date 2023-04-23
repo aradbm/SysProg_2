@@ -40,6 +40,9 @@ void DeleteAdptArray(PAdptArray p_arr)
 }
 Result SetAdptArrayAt(PAdptArray p_arr, int index, PElement elem)
 {
+    if (index < 0)
+        return FAIL;
+
     if (p_arr == NULL) // check we get a array
         return FAIL;
     int newsize = p_arr->size;
