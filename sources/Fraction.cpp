@@ -2,7 +2,7 @@
 
 namespace ariel
 {
-    Fraction::Fraction(int n, int d)
+    Fraction::Fraction(int divident, int divisor)
     {
     }
 
@@ -80,19 +80,19 @@ namespace ariel
         return true;
     }
 
-    std::ostream &operator<<(std::ostream &os, const Fraction &frac)
+    std::ostream &operator<<(std::ostream &o_stream, const Fraction &frac)
     {
-        return os;
+        return o_stream;
     }
 
-    std::ostream &operator<<(std::ostream &os, bool frac)
+    std::ostream &operator<<(std::ostream &o_stream, bool frac)
     {
-        return os;
+        return o_stream;
     }
 
-    std::istream &operator>>(std::istream &is, Fraction &frac)
+    std::istream &operator>>(std::istream &i_stream, Fraction &frac)
     {
-        return is;
+        return i_stream;
     }
 
     Fraction operator+(const float &num, const Fraction &other)

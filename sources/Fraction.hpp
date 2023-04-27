@@ -8,11 +8,11 @@ namespace ariel
     class Fraction
     {
     private:
-        int numerator;
-        int denominator;
+        int divident;
+        int divisor;
 
     public:
-        Fraction(int n, int d);
+        Fraction(int divident, int divisor);
         Fraction(float num);
 
         Fraction operator+(const Fraction &other) const;
@@ -29,9 +29,9 @@ namespace ariel
         bool operator>(const Fraction &other) const;
         bool operator<=(const Fraction &other) const;
         bool operator>=(const Fraction &other) const;
-        friend std::ostream &operator<<(std::ostream &os, const Fraction &frac);
-        friend std::ostream &operator<<(std::ostream &os, bool frac);
-        friend std::istream &operator>>(std::istream &is, Fraction &frac);
+        friend std::ostream &operator<<(std::ostream &o_stream, const Fraction &frac);
+        friend std::ostream &operator<<(std::ostream &o_stream, bool frac);
+        friend std::istream &operator>>(std::istream &i_stream, Fraction &frac);
         friend Fraction operator+(const float &num, const Fraction &other);
         friend Fraction operator-(const float &num, const Fraction &other);
         friend Fraction operator*(const float &num, const Fraction &other);
