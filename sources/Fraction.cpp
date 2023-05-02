@@ -2,20 +2,12 @@
 #include <iostream>
 #include <stdexcept>
 #include <numeric>
-#include <limits>
-#include <cmath>
-#include <string>
-#include <sstream>
-#include <algorithm>
-#include <cstdlib>
 
-int maxInt = std::numeric_limits<int>::max();
-int minInt = std::numeric_limits<int>::min();
+int maxInt = 2147483647;
+int minInt = -2147483648;
 namespace ariel
 {
-
     Fraction::Fraction() : divident(0), divisor(1) {}
-
     Fraction::Fraction(int divident, int divisor)
     {
         if (divisor == 0)
@@ -55,25 +47,27 @@ namespace ariel
             divisor *= -1;
         }
     }
+
     Fraction Fraction::operator+(const Fraction &other) const
     {
         long long num1 = (long long)(this->divident) / this->divisor;
         long long num2 = (long long)(other.divident) / other.divisor;
         if (num1 != 0 && num2 != 0 && num1 * num2 > maxInt)
-            throw std::overflow_error("Cannot add.");
+            throw std::overflow_error("cant +");
         if (num1 != 0 && num2 != 0 && num1 * num2 < minInt)
-            throw std::overflow_error("Cannot add.");
+            throw std::overflow_error("cant +");
         int commonDivisor = this->divisor * other.divisor;
         int newDivident = this->divident * other.divisor + other.divident * this->divisor;
         return Fraction(newDivident, commonDivisor);
     }
+
     Fraction Fraction::operator-(const Fraction &other) const
     {
         if ((double)(this->divisor) * other.divisor > (double)(maxInt))
-            throw std::overflow_error("Cannot subtract.");
+            throw std::overflow_error("cant -");
 
         if ((double)(this->divident) * other.divisor - (double)(other.divident) * this->divisor > (double)(maxInt))
-            throw std::overflow_error("Cannot subtract.");
+            throw std::overflow_error("cant -");
         int commonDivisor = this->divisor * other.divisor;
         int newDivident = this->divident * other.divisor - other.divident * this->divisor;
         return Fraction(newDivident, commonDivisor);
@@ -85,7 +79,7 @@ namespace ariel
             return Fraction(0, 1);
         if ((double)(this->divident) * other.divident > (double)(maxInt) ||
             (double)(this->divisor) * other.divisor > (double)(maxInt))
-            throw std::overflow_error("Cannot multiply. Overflow error.");
+            throw std::overflow_error("cant *");
         int newDivident = this->divident * other.divident;
         int newDivisor = this->divisor * other.divisor;
         Fraction result(newDivident, newDivisor);
@@ -96,10 +90,10 @@ namespace ariel
     Fraction Fraction::operator/(const Fraction &other) const
     {
         if (other.divident == 0)
-            throw std::overflow_error("Cannot divide by zero.");
+            throw std::overflow_error("cant /");
         if ((double)(this->divident) * other.divisor > (double)(maxInt) ||
             (double)(this->divisor) * other.divident > (double)(maxInt))
-            throw std::overflow_error("Cannot divide. Overflow error.");
+            throw std::overflow_error("cant /");
         int newDivident = this->divident * other.divisor;
         int newDivisor = this->divisor * other.divident;
         return Fraction(newDivident, newDivisor);
