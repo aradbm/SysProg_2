@@ -3,6 +3,11 @@
 #include <stdexcept>
 #include <numeric>
 #include <limits>
+#include <cmath>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <cstdlib>
 
 int maxInt = std::numeric_limits<int>::max();
 int minInt = std::numeric_limits<int>::min();
@@ -14,10 +19,7 @@ namespace ariel
     Fraction::Fraction(int divident, int divisor)
     {
         if (divisor == 0)
-        {
-            throw std::invalid_argument("Divisor cannot be zero.");
-        }
-
+            throw std::invalid_argument("divideing by 0!");
         this->divident = divident;
         this->divisor = divisor;
         reduce();
@@ -29,9 +31,7 @@ namespace ariel
         this->divisor = 1000;
         reduce();
         if (divisor == 0)
-        {
-            throw std::invalid_argument("Divisor cannot be zero.");
-        }
+            throw std::invalid_argument("divideing by 0!");
     }
 
     int Fraction::getNumerator() const
@@ -49,46 +49,31 @@ namespace ariel
         int gcd = std::gcd(divident, divisor);
         divident /= gcd;
         divisor /= gcd;
-
         if (divisor < 0)
         {
             divident *= -1;
             divisor *= -1;
         }
     }
-
     Fraction Fraction::operator+(const Fraction &other) const
     {
         long long num1 = (long long)(this->divident) / this->divisor;
         long long num2 = (long long)(other.divident) / other.divisor;
         if (num1 != 0 && num2 != 0 && num1 * num2 > maxInt)
-        {
             throw std::overflow_error("Cannot add.");
-        }
         if (num1 != 0 && num2 != 0 && num1 * num2 < minInt)
-        {
             throw std::overflow_error("Cannot add.");
-        }
-
         int commonDivisor = this->divisor * other.divisor;
         int newDivident = this->divident * other.divisor + other.divident * this->divisor;
-
         return Fraction(newDivident, commonDivisor);
     }
-
     Fraction Fraction::operator-(const Fraction &other) const
     {
-        long long num1 = (long long)(this->divident) / this->divisor;
-        long long num2 = (long long)(other.divident) / other.divisor;
-        if (num1 != 0 && num2 != 0 && num1 * num2 > maxInt)
-        {
+        if ((double)(this->divisor) * other.divisor > (double)(maxInt))
             throw std::overflow_error("Cannot subtract.");
-        }
-        if (num1 != 0 && num2 != 0 && num1 * num2 < minInt)
-        {
-            throw std::overflow_error("Cannot subtract.");
-        }
 
+        if ((double)(this->divident) * other.divisor - (double)(other.divident) * this->divisor > (double)(maxInt))
+            throw std::overflow_error("Cannot subtract.");
         int commonDivisor = this->divisor * other.divisor;
         int newDivident = this->divident * other.divisor - other.divident * this->divisor;
         return Fraction(newDivident, commonDivisor);
@@ -97,24 +82,10 @@ namespace ariel
     Fraction Fraction::operator*(const Fraction &other) const
     {
         if (other.divident == 0 || this->divident == 0)
-        {
             return Fraction(0, 1);
-        }
-        if (this->divident == maxInt || other.divident == maxInt)
-        {
-            throw std::overflow_error("Cannot multiply.");
-        }
-        long long num1 = (long long)(this->divident) / this->divisor;
-        long long num2 = (long long)(other.divident) / other.divisor;
-        if (num1 != 0 && num2 != 0 && num1 * num2 > maxInt)
-        {
-            throw std::overflow_error("Cannot multiply.");
-        }
-        if (num1 != 0 && num2 != 0 && num1 * num2 < minInt)
-        {
-            throw std::overflow_error("Cannot multiply.");
-        }
-
+        if ((double)(this->divident) * other.divident > (double)(maxInt) ||
+            (double)(this->divisor) * other.divisor > (double)(maxInt))
+            throw std::overflow_error("Cannot multiply. Overflow error.");
         int newDivident = this->divident * other.divident;
         int newDivisor = this->divisor * other.divisor;
         Fraction result(newDivident, newDivisor);
@@ -125,9 +96,10 @@ namespace ariel
     Fraction Fraction::operator/(const Fraction &other) const
     {
         if (other.divident == 0)
-        {
             throw std::overflow_error("Cannot divide by zero.");
-        }
+        if ((double)(this->divident) * other.divisor > (double)(maxInt) ||
+            (double)(this->divisor) * other.divident > (double)(maxInt))
+            throw std::overflow_error("Cannot divide. Overflow error.");
         int newDivident = this->divident * other.divisor;
         int newDivisor = this->divisor * other.divident;
         return Fraction(newDivident, newDivisor);
@@ -161,7 +133,9 @@ namespace ariel
 
     bool Fraction::operator==(const Fraction &other) const
     {
-        return this->divident * other.divisor == other.divident * this->divisor;
+        float num1 = (float)this->divident / this->divisor;
+        float num2 = (float)other.divident / other.divisor;
+        return std::abs(num1 - num2) < 0.001; // check if the difference is less than 0.001 like needed
     }
 
     bool Fraction::operator!=(const Fraction &other) const
@@ -200,19 +174,17 @@ namespace ariel
     std::istream &operator>>(std::istream &i_stream, Fraction &frac)
     {
         i_stream >> frac.divident;
-        i_stream.ignore(1); // Ignore the '/' character
+        if (i_stream.peek() == '.')
+            throw std::runtime_error("Invalid input.");
+        i_stream.ignore(1); // Ignore the / or ,
         int divisor;
         i_stream >> divisor;
         if (divisor == 0)
-        {
-            throw std::runtime_error("Divisor cannot be zero.");
-        }
+            throw std::runtime_error("divideing by 0!");
         frac.divisor = divisor;
         frac.reduce();
         if (i_stream.fail())
-        {
             throw std::runtime_error("Invalid input.");
-        }
         return i_stream;
     }
     Fraction operator+(const float &num, const Fraction &other)
@@ -229,7 +201,6 @@ namespace ariel
 
     Fraction operator*(const float &num, const Fraction &other)
     {
-        // check not overflow
         Fraction floatFrac(num);
         return floatFrac * other;
     }
@@ -275,5 +246,4 @@ namespace ariel
         Fraction floatFrac(num);
         return floatFrac >= other;
     }
-
 }
