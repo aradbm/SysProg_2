@@ -12,13 +12,15 @@ namespace ariel
         int divisor;
 
     public:
+        // constructors
         Fraction();
         Fraction(int divident, int divisor);
         Fraction(float num);
-
         void reduce();
         int getNumerator() const;
         int getDenominator() const;
+
+        // operators
         Fraction operator+(const Fraction &other) const;
         Fraction operator-(const Fraction &other) const;
         Fraction operator*(const Fraction &other) const;
