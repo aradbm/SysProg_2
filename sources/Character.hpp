@@ -21,11 +21,10 @@ namespace ariel
 
     public:
         Character(string name, int health, Point location);
-        void virtual print();
+        string print();
         bool virtual isAlive();
         double virtual distance(Character &other);
         void virtual hit(Character &other);
-        void virtual print();
     };
 };
 
