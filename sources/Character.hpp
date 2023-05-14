@@ -13,7 +13,7 @@ namespace ariel
     private:
         string name;
         int health;
-        Point location;
+        Point &location;
 
     public:
         string getName();
@@ -23,8 +23,8 @@ namespace ariel
         Character(string name, int health, Point location);
         string print();
         bool virtual isAlive();
-        double virtual distance(Character &other);
-        void virtual hit(Character &other);
+        double distance(Character *other);
+        void hit(double value);
     };
 };
 

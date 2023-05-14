@@ -1,10 +1,10 @@
-#ifndef POINT_HPP
-#define POINT_HPP
-
+#pragma once
 #include <iostream>
-#include <math.h>
+#include <cmath>
+
 namespace ariel
 {
+
     class Point
     {
     private:
@@ -13,13 +13,13 @@ namespace ariel
 
     public:
         Point(double lat, double lon);
-        double getX();
-        double getY();
+        Point(const Point &other);
+        double getX() const;
+        double getY() const;
 
-        double distance(Point other);
-        void print();
-        Point moveTowards(Point other, double dist);
+        double distance(const Point &other) const;
+        void print() const;
+        static Point moveTowards(const Point &point1, const Point &point2, double dist);
     };
-};
 
-#endif
+}

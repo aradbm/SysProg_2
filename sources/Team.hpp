@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Ninja.hpp"
-#include "Cowboy.hpp"
+#include "Character.hpp"
 #include "Point.hpp"
 
 namespace ariel
@@ -20,12 +19,6 @@ namespace ariel
         void attack(Team *other);
         int stillAlive();
         void print();
-    };
-
-    class Team2 : public Team
-    {
-    public:
-        void virtual print();
     };
 
     class SmartTeam : public Team

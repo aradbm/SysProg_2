@@ -10,9 +10,8 @@ namespace ariel
         int bullets;
 
     public:
-        Cowboy(string name, Point location) : Character(name, 110, location), bullets(6) {}
-        void hit(Character &other);
-        double distance(Character &other);
+        static const int cb_hp = 110;
+        Cowboy(string name, Point location) : Character(name, cb_hp, location), bullets(6) {}
         void shoot(Character *other);
         bool hasBullets();
         void reload();
