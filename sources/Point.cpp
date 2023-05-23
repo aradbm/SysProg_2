@@ -5,7 +5,6 @@ namespace ariel
 {
 
     Point::Point(double lat, double lon) : lat(lat), lon(lon) {}
-    Point::Point(const Point &other) : lat(other.lat), lon(other.lon) {}
     double Point::getX() const
     {
         return lat;

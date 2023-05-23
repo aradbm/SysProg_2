@@ -4,7 +4,7 @@
 
 namespace ariel
 {
-    Character::Character(string name, int health, Point &location)
+    Character::Character(string name, int health, const Point &location)
         : name(name), health(health), location(location) {}
 
     string Character::print()

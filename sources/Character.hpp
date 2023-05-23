@@ -12,14 +12,14 @@ namespace ariel
     private:
         string name;
         int health;
-        Point &location;
+        Point location;
 
     public:
         string getName() const { return name; }
         Point getLocation() const { return location; }
 
     public:
-        Character(string name, int health, Point &location);
+        Character(string name, int health, const Point &location);
         string print();
         bool virtual isAlive();
         double distance(Character *other);

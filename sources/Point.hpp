@@ -13,7 +13,6 @@ namespace ariel
 
     public:
         Point(double lat, double lon);
-        Point(const Point &other);
         double getX() const;
         double getY() const;
 
