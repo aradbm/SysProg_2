@@ -52,98 +52,66 @@ namespace ariel
         }
     }
 
+    Character *Team::findClosestMember(Character *leader, std::vector<Character *> &members)
+    {
+        double minDistance = std::numeric_limits<double>::max();
+        Character *closestCharacter = nullptr;
+        for (Character *character : members)
+        {
+            if (character->isAlive())
+            {
+                double distance = leader->distance(character);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestCharacter = character;
+                }
+            }
+        }
+        return closestCharacter;
+    }
+
     void Team::attack(Team *other)
     {
         if (other == nullptr)
         {
-            throw std::invalid_argument("Team is null");
-        }
-        if (this == other)
-        {
-            throw std::invalid_argument("Team is attacking itself");
+            throw std::invalid_argument("Invalid enemy team");
         }
         if (other->stillAlive() == 0)
         {
-            throw std::runtime_error("Team is dead");
+            throw std::runtime_error("Attacking a dead team");
+        }
+        if (leader == nullptr || !leader->isAlive())
+        {
+            leader = findClosestMember(leader, members);
+            if (leader == nullptr)
+                return;
         }
 
-        if (leader->isAlive() && other->leader->isAlive())
+        if (other->stillAlive() > 0 && stillAlive() > 0)
         {
-            for (Character *attacker : members)
+            Character *closestEnemy = nullptr;
+            for (Character *character : members)
             {
-                if (!attacker->isAlive())
+                if (character->isAlive())
                 {
-                    continue; // Skip dead attackers
-                }
-
-                Character *closestEnemy = nullptr;
-                double minDistance = std::numeric_limits<double>::max();
-
-                for (Character *enemy : other->members)
-                {
-                    if (!enemy->isAlive())
+                    closestEnemy = closestEnemy == nullptr ? findClosestMember(leader, other->members) : closestEnemy;
+                    if (Cowboy *cowboy = dynamic_cast<Cowboy *>(character))
                     {
-                        continue; // Skip dead enemies
+                        cowboy->hasboolets() ? cowboy->shoot(closestEnemy) : cowboy->reload();
                     }
-
-                    double distance = attacker->distance(enemy);
-                    if (distance < minDistance)
+                    else if (Ninja *ninja = dynamic_cast<Ninja *>(character))
                     {
-                        minDistance = distance;
-                        closestEnemy = enemy;
+                        ninja->distance(closestEnemy) <= 1 ? ninja->slash(closestEnemy) : ninja->move(closestEnemy);
                     }
                 }
-
-                if (closestEnemy != nullptr)
+                if (closestEnemy != nullptr && !closestEnemy->isAlive())
                 {
-                    Cowboy *cowboy = dynamic_cast<Cowboy *>(attacker);
-                    if (cowboy != nullptr)
-                    {
-                        cowboy->shoot(closestEnemy);
-                    }
-                    else
-                    {
-                        Ninja *ninja = dynamic_cast<Ninja *>(attacker);
-                        if (ninja != nullptr)
-                        {
-                            if (minDistance <= 1.0)
-                            {
-                                ninja->slash(closestEnemy);
-                            }
-                            else
-                            {
-                                ninja->move(closestEnemy);
-                            }
-                        }
-                    }
-
-                    if (!closestEnemy->isAlive())
-                    {
-                        if (closestEnemy == other->leader)
-                        {
-                            other->leaderDead();
-                        }
-                        // Remove dead enemy from other team
-                        for (auto it = other->members.begin(); it != other->members.end(); ++it)
-                        {
-                            if (!(*it)->isAlive())
-                            {
-                                other->members.erase(it);
-                                break;
-                            }
-                        }
-                        other->size--;
-                    }
+                    closestEnemy = findClosestMember(leader, other->members);
+                    if (closestEnemy == nullptr)
+                        return;
                 }
             }
-            other->members.erase(std::remove_if(other->members.begin(), other->members.end(),
-                                                [](Character *character)
-                                                { return !character->isAlive(); }),
-                                 other->members.end());
-            other->size = other->members.size();
-        }
-        else
-        {
         }
     }
 

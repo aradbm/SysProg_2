@@ -25,6 +25,7 @@ namespace ariel
         int stillAlive();
         void virtual print();
         void leaderDead();
+        Character *findClosestMember(Character *leader, std::vector<Character *> &members);
     };
 
     class SmartTeam : public Team
