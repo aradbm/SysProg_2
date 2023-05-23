@@ -22,8 +22,8 @@ namespace ariel
         static const int on_hp = 150;
         static const int tn_hp = 120;
         static const int yn_hp = 100;
-        static const int on_speed = 10;
+        static const int on_speed = 8;
         static const int tn_speed = 12;
-        static const int yn_speed = 15;
+        static const int yn_speed = 14;
     };
 };

@@ -4,16 +4,16 @@
 #include "YoungNinja.hpp"
 #include "TrainedNinja.hpp"
 #include "OldNinja.hpp"
-
+#include <vector>
 const static int MAX_SIZE = 10;
 
 namespace ariel
 {
     class Team
     {
-    protected:
+    private:
         Character *leader;
-        Character *members[MAX_SIZE];
+        vector<Character *> members;
         int size;
 
     public:
@@ -24,6 +24,7 @@ namespace ariel
         Character *closestEnemy(Team *Other);
         int stillAlive();
         void virtual print();
+        void leaderDead();
     };
 
     class SmartTeam : public Team

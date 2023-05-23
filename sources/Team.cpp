@@ -1,94 +1,156 @@
 #include "Team.hpp"
-
+#include <stdexcept>
+#include <limits>
+#include <iostream>
+#include <algorithm>
 namespace ariel
 {
-    Team::Team(Character *leader) : leader(leader), size(0)
+    Team::Team(Character *leader) : leader(leader)
     {
-        for (int i = 0; i < 10; i++)
+        if (leader->getInGame())
         {
-            members[i] = nullptr;
+            throw std::runtime_error("Character is already in a team");
         }
+
+        members.push_back(leader);
+        leader->setInGame(true);
+        size = 1;
     }
 
     Team::~Team()
     {
-        for (int i = 0; i < size; i++)
-        {
-            delete members[i];
-        }
-        delete leader;
+        members.clear();
     }
-
     void Team::add(Character *new_char)
     {
-        if (size < 10)
+        if (new_char->getInGame())
         {
-            for (int i = 0; i < size; i++)
-            {
-                if (members[i] == new_char)
-                {
-                    std::cout << "Character is already in the team. Cannot add duplicates." << std::endl;
-                    return;
-                }
-            }
-            members[size++] = new_char;
+            throw std::runtime_error("Character is already in a team");
+            return;
         }
-        else
+
+        if (size >= MAX_SIZE)
         {
-            throw std::runtime_error("Team is full. Cannot add more characters.");
+            throw std::runtime_error("Team is full");
+            return;
+        }
+
+        members.push_back(new_char);
+        new_char->setInGame(true);
+        size++;
+    }
+    void Team::leaderDead()
+    {
+        // change to closest alive member
+        for (vector<Character *>::size_type i = 0; i < members.size(); i++)
+        {
+            if (members[i]->isAlive())
+            {
+                leader = members[i];
+                return;
+            }
         }
     }
+
     void Team::attack(Team *other)
     {
+        if (other == nullptr)
+        {
+            throw std::invalid_argument("Team is null");
+        }
+        if (this == other)
+        {
+            throw std::invalid_argument("Team is attacking itself");
+        }
+        if (other->stillAlive() == 0)
+        {
+            throw std::runtime_error("Team is dead");
+        }
+
         if (leader->isAlive() && other->leader->isAlive())
         {
-            std::cout << "Team " << leader->getName() << " attacks Team " << other->leader->getName() << std::endl;
-
-            for (int i = 0; i < size; i++)
+            for (Character *attacker : members)
             {
-                if (members[i]->isAlive() && other->size > 0)
+                if (!attacker->isAlive())
                 {
-                    Character *enemy = nullptr;
-                    for (int k = 0; k < other->size; k++)
+                    continue; // Skip dead attackers
+                }
+
+                Character *closestEnemy = nullptr;
+                double minDistance = std::numeric_limits<double>::max();
+
+                for (Character *enemy : other->members)
+                {
+                    if (!enemy->isAlive())
                     {
-                        if (other->members[k]->isAlive())
-                        {
-                            enemy = other->members[k];
-                            break;
-                        }
+                        continue; // Skip dead enemies
                     }
-                    // Check the type of character and call the appropriate attack function.
-                    Cowboy *cowboy = dynamic_cast<Cowboy *>(members[i]);
-                    if (cowboy)
+
+                    double distance = attacker->distance(enemy);
+                    if (distance < minDistance)
                     {
-                        cowboy->shoot(enemy);
+                        minDistance = distance;
+                        closestEnemy = enemy;
+                    }
+                }
+
+                if (closestEnemy != nullptr)
+                {
+                    Cowboy *cowboy = dynamic_cast<Cowboy *>(attacker);
+                    if (cowboy != nullptr)
+                    {
+                        cowboy->shoot(closestEnemy);
                     }
                     else
                     {
-                        // It's some type of Ninja.
-                        Ninja *ninja = dynamic_cast<Ninja *>(members[i]);
-                        if (ninja)
+                        Ninja *ninja = dynamic_cast<Ninja *>(attacker);
+                        if (ninja != nullptr)
                         {
-                            ninja->slash(enemy);
+                            if (minDistance <= 1.0)
+                            {
+                                ninja->slash(closestEnemy);
+                            }
+                            else
+                            {
+                                ninja->move(closestEnemy);
+                            }
                         }
                     }
-                    if (enemy && !enemy->isAlive())
+
+                    if (!closestEnemy->isAlive())
                     {
-                        std::cout << enemy->getName() << " from Team " << other->leader->getName() << " has been defeated." << std::endl;
+                        if (closestEnemy == other->leader)
+                        {
+                            other->leaderDead();
+                        }
+                        // Remove dead enemy from other team
+                        for (auto it = other->members.begin(); it != other->members.end(); ++it)
+                        {
+                            if (!(*it)->isAlive())
+                            {
+                                other->members.erase(it);
+                                break;
+                            }
+                        }
+                        other->size--;
                     }
                 }
             }
+            other->members.erase(std::remove_if(other->members.begin(), other->members.end(),
+                                                [](Character *character)
+                                                { return !character->isAlive(); }),
+                                 other->members.end());
+            other->size = other->members.size();
         }
         else
         {
-            std::cout << "Team " << leader->getName() << " is defeated and cannot attack." << std::endl;
         }
     }
 
     int Team::stillAlive()
     {
-        int count = leader->isAlive() ? 1 : 0;
-        for (int i = 0; i < size; i++)
+        int count = 0;
+        for (vector<Character *>::size_type i = 0; i < members.size(); i++)
         {
             if (members[i]->isAlive())
             {
@@ -102,9 +164,9 @@ namespace ariel
     {
         std::cout << "Team Leader: " << leader->getName() << std::endl;
         std::cout << "Team Members: " << std::endl;
-        for (int i = 0; i < size; i++)
+        for (vector<Character *>::size_type i = 0; i < members.size(); i++)
         {
-            std::cout << members[i]->getName() << std::endl;
+            std::cout << members[i]->getName() << "," << members[i]->getLocation().getX() << "," << members[i]->getLocation().getY() << std::endl;
         }
     }
 }

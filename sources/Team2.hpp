@@ -10,9 +10,5 @@ namespace ariel
     {
     public:
         Team2(Character *leader) : Team(leader) {}
-        void virtual print()
-        {
-            std::cout << "Team2" << std::endl;
-        }
     };
 };

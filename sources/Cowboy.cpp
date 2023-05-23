@@ -5,15 +5,16 @@ namespace ariel
 {
     void Cowboy::shoot(Character *other)
     {
+        if (!other->isAlive())
+            throw std::runtime_error("Cannot shoot a dead character.");
+        if (!isAlive())
+            throw std::runtime_error("Cannot shoot with a dead character.");
+        if(other == this)
+            throw std::runtime_error("Cannot shoot yourself.");
         if (bullets > 0)
         {
-            std::cout << getName() << " shoots " << other->getName() << std::endl;
             bullets--;
             other->hit(10);
-        }
-        else
-        {
-            std::cout << getName() << " is out of bullets." << std::endl;
         }
     }
 
@@ -24,7 +25,8 @@ namespace ariel
 
     void Cowboy::reload()
     {
+        if (!isAlive())
+            throw std::runtime_error("Cannot reload with a dead character.");
         bullets = 6;
-        std::cout << getName() << " has reloaded." << std::endl;
     }
 }

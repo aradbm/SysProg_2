@@ -26,22 +26,22 @@ namespace ariel
     {
         std::cout << "(" << lat << ", " << lon << ")" << std::endl;
     }
-    Point Point::moveTowards(const Point &point1, const Point &point2, double dist)
+    Point  Point::moveTowards(const Point &point1, const Point &point2, double dist)
     {
-        double x1 = point1.getX();
-        double y1 = point1.getY();
-        double x2 = point2.getX();
-        double y2 = point2.getY();
-        double distance = point1.distance(point2);
-
         if (dist < 0)
-        {
-            throw std::invalid_argument("Negative distance is not allowed.");
-        }
+            throw std::invalid_argument("Negative value is not allowed.");
 
-        double x3 = x1 + (dist * (x2 - x1)) / distance;
-        double y3 = y1 + (dist * (y2 - y1)) / distance;
+        double x_diff = point2.getX() - point1.getX();
+        double y_diff = point2.getY() - point1.getY();
+        double distance = std::sqrt(x_diff * x_diff + y_diff * y_diff);
 
-        return Point(x3, y3);
+        if (distance <= dist)
+            return point2;
+
+        double ratio = dist / distance;
+        double x = point1.getX() + ratio * x_diff;
+        double y = point1.getY() + ratio * y_diff;
+
+        return Point(x, y);
     }
 }

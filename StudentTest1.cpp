@@ -132,7 +132,6 @@ TEST_SUITE("Classes initialization tests and Team modification( add(),stillAlive
     TEST_CASE("YoungNinja initialization")
     {
         YoungNinja ninja{"Bob", Point{2, 3}};
-        ninja.getLocation().print();
         CHECK_EQ(ninja.getName(), "Bob");
         CHECK_EQ(ninja.getLocation().distance(Point{2, 3}), 0);
         CHECK_NE(ninja.getLocation().distance(Point{3, 2}), 0);

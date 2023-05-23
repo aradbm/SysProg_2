@@ -13,10 +13,14 @@ namespace ariel
         string name;
         int health;
         Point location;
+        bool inGame;
 
     public:
         string getName() const { return name; }
         Point getLocation() const { return location; }
+        void setLocation(Point location) { this->location = location; }
+        bool getInGame() const { return inGame; }
+        void setInGame(bool inGame) { this->inGame = inGame; }
 
     public:
         Character(string name, int health, const Point &location);
