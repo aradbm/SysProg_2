@@ -1,8 +1,6 @@
 #pragma once
 
-#include <iostream>
 #include <string>
-#include <math.h>
 #include "Point.hpp"
 #include "Character.hpp"
 
@@ -26,23 +24,4 @@ namespace ariel
         static const int tn_speed = 12;
         static const int yn_speed = 15;
     };
-
-    class OldNinja : public Ninja
-    {
-    public:
-        OldNinja(string name, Point location) : Ninja(name, location, on_speed, on_hp) {}
-    };
-
-    class TrainedNinja : public Ninja
-    {
-    public:
-        TrainedNinja(string name, Point location) : Ninja(name, location, tn_speed, tn_hp) {}
-    };
-
-    class YoungNinja : public Ninja
-    {
-    public:
-        YoungNinja(string name, Point location) : Ninja(name, location, yn_speed, yn_hp) {}
-    };
-
 };

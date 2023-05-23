@@ -1,24 +1,32 @@
-#include <iostream>
-#include <cmath>
 #include "Point.hpp"
-#include "Character.hpp"
+#include <cmath>
 
 namespace ariel
 {
 
     Point::Point(double lat, double lon) : lat(lat), lon(lon) {}
-    double Point::getX() const { return lat; }
-    double Point::getY() const { return lon; }
+    Point::Point(const Point &other) : lat(other.lat), lon(other.lon) {}
+    double Point::getX() const
+    {
+        return lat;
+    }
+
+    double Point::getY() const
+    {
+        return lon;
+    }
+
     double Point::distance(const Point &other) const
     {
-        return std::sqrt((other.getX() - lat) * (other.getX() - lat) + (other.getY() - lon) * (other.getY() - lon));
+        double x_diff = other.getX() - lat;
+        double y_diff = other.getY() - lon;
+        return std::sqrt(x_diff * x_diff + y_diff * y_diff);
     }
 
     void Point::print() const
     {
         std::cout << "(" << lat << ", " << lon << ")" << std::endl;
     }
-
     Point Point::moveTowards(const Point &point1, const Point &point2, double dist)
     {
         double x1 = point1.getX();
@@ -29,7 +37,7 @@ namespace ariel
 
         if (dist < 0)
         {
-            throw std::invalid_argument("cant get negative number");
+            throw std::invalid_argument("Negative distance is not allowed.");
         }
 
         double x3 = x1 + (dist * (x2 - x1)) / distance;
@@ -37,5 +45,4 @@ namespace ariel
 
         return Point(x3, y3);
     }
-
-} // namespace ariel
+}

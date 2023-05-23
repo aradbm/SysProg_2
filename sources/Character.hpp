@@ -1,7 +1,6 @@
 #ifndef CHARACTER_HPP
 #define CHARACTER_HPP
 
-#include <iostream>
 #include <math.h>
 #include "Point.hpp"
 using namespace std;
@@ -16,11 +15,11 @@ namespace ariel
         Point &location;
 
     public:
-        string getName();
-        Point getLocation();
+        string getName() const { return name; }
+        Point getLocation() const { return location; }
 
     public:
-        Character(string name, int health, Point location);
+        Character(string name, int health, Point &location);
         string print();
         bool virtual isAlive();
         double distance(Character *other);

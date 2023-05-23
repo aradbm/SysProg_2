@@ -1,45 +1,33 @@
 #include <iostream>
-#include <string>
-#include <math.h>
-#include "Point.hpp"
+#include <cmath>
+#include "Character.hpp"
 
-using namespace std;
 namespace ariel
 {
-    class Character
+    Character::Character(string name, int health, Point &location)
+        : name(name), health(health), location(location) {}
+
+    string Character::print()
     {
-    private:
-        std::string name;
-        int health;
-        Point &location;
+        return "Character: " + name + "\nHealth: " + to_string(health) +
+               "\nLocation: (" + to_string(location.getX()) + ", " + to_string(location.getY()) + ")";
+    }
 
-    public:
-        Character(std::string name, int health, Point location)
-            : name(name), health(health), location(location) {}
+    bool Character::isAlive()
+    {
+        return health > 0;
+    }
 
-        std::string getName() const { return name; }
-        Point getLocation() const { return location; }
+    double Character::distance(Character *other)
+    {
+        return location.distance(other->getLocation());
+    }
 
-        std::string print() const
-        {
-            return "Character: " + name + "\nHealth: " + std::to_string(health) +
-                   "\nLocation: (" + std::to_string(location.getX()) + ", " + std::to_string(location.getY()) + ")";
-        }
-
-        bool isAlive() const { return health > 0; }
-
-        double Character::distance(Character *other)
-        {
-            return location.distance(other->getLocation());
-        }
-
-        void hit(double value)
-        {
-            if (value < 0)
-            {
-                throw std::invalid_argument("Negative value is not allowed.");
-            }
-            std::cout << name << " was hit with " << value << " damage." << std::endl;
-        }
-    };
+    void Character::hit(double value)
+    {
+        if (value < 0)
+            throw std::invalid_argument("Negative value is not allowed.");
+        this->health -= value;
+        cout << name << " was hit with " << value << " damage." << endl;
+    }
 }

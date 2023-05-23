@@ -1,29 +1,35 @@
 #pragma once
 
-#include "Character.hpp"
-#include "Point.hpp"
+#include "Cowboy.hpp"
+#include "YoungNinja.hpp"
+#include "TrainedNinja.hpp"
+#include "OldNinja.hpp"
+
+const static int MAX_SIZE = 10;
 
 namespace ariel
 {
     class Team
     {
+    protected:
         Character *leader;
-        Character *members[10];
+        Character *members[MAX_SIZE];
         int size;
 
-    private:
     public:
         Team(Character *leader);
         virtual ~Team();
         void add(Character *new_char);
-        void attack(Team *other);
+        void virtual attack(Team *other);
+        Character *closestEnemy(Team *Other);
         int stillAlive();
-        void print();
+        void virtual print();
     };
 
     class SmartTeam : public Team
     {
     public:
-        void virtual print();
+        SmartTeam(Character *leader) : Team(leader) {}
+        void attack(Team *Other);
     };
 };
