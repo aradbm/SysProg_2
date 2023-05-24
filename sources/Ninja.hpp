@@ -13,9 +13,7 @@ namespace ariel
         int speed;
 
     public:
-        Ninja(string name, Point location, int speed, int hp) : Character(name, hp, location), speed(speed)
-        {
-        }
+        Ninja(string name, Point location, int speed, int hp) : Character(name, hp, location), speed(speed) {}
         void move(Character *other);
         void slash(Character *other);
 

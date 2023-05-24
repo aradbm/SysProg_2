@@ -33,6 +33,5 @@ namespace ariel
         if (!isAlive())
             throw std::runtime_error("Cannot hit a dead character.");
         this->health -= value;
-        // cout << name << " was hit with " << value << " damage." << endl;
     }
 }

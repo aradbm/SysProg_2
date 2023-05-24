@@ -23,36 +23,19 @@ namespace ariel
     }
     void Team::add(Character *new_char)
     {
+        // cowboys first than ninjas
         if (new_char->getInGame())
-        {
             throw std::runtime_error("Character is already in a team");
-            return;
-        }
 
         if (size >= MAX_SIZE)
-        {
             throw std::runtime_error("Team is full");
-            return;
-        }
 
         members.push_back(new_char);
         new_char->setInGame(true);
         size++;
     }
-    void Team::leaderDead()
-    {
-        // change to closest alive member
-        for (vector<Character *>::size_type i = 0; i < members.size(); i++)
-        {
-            if (members[i]->isAlive())
-            {
-                leader = members[i];
-                return;
-            }
-        }
-    }
 
-    Character *Team::findClosestMember(Character *leader, std::vector<Character *> &members)
+    Character *Team::findEnemy(Character *leader, std::vector<Character *> &members)
     {
         double minDistance = std::numeric_limits<double>::max();
         Character *closestCharacter = nullptr;
@@ -74,16 +57,12 @@ namespace ariel
     void Team::attack(Team *other)
     {
         if (other == nullptr)
-        {
             throw std::invalid_argument("Invalid enemy team");
-        }
         if (other->stillAlive() == 0)
-        {
             throw std::runtime_error("Attacking a dead team");
-        }
         if (leader == nullptr || !leader->isAlive())
         {
-            leader = findClosestMember(leader, members);
+            leader = findEnemy(leader, members);
             if (leader == nullptr)
                 return;
         }
@@ -95,19 +74,15 @@ namespace ariel
             {
                 if (character->isAlive())
                 {
-                    closestEnemy = closestEnemy == nullptr ? findClosestMember(leader, other->members) : closestEnemy;
+                    closestEnemy = closestEnemy == nullptr ? findEnemy(leader, other->members) : closestEnemy;
                     if (Cowboy *cowboy = dynamic_cast<Cowboy *>(character))
-                    {
                         cowboy->hasboolets() ? cowboy->shoot(closestEnemy) : cowboy->reload();
-                    }
                     else if (Ninja *ninja = dynamic_cast<Ninja *>(character))
-                    {
                         ninja->distance(closestEnemy) <= 1 ? ninja->slash(closestEnemy) : ninja->move(closestEnemy);
-                    }
                 }
                 if (closestEnemy != nullptr && !closestEnemy->isAlive())
                 {
-                    closestEnemy = findClosestMember(leader, other->members);
+                    closestEnemy = findEnemy(leader, other->members);
                     if (closestEnemy == nullptr)
                         return;
                 }
@@ -121,9 +96,7 @@ namespace ariel
         for (vector<Character *>::size_type i = 0; i < members.size(); i++)
         {
             if (members[i]->isAlive())
-            {
                 count++;
-            }
         }
         return count;
     }

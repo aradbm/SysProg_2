@@ -9,7 +9,7 @@ namespace ariel
             throw std::runtime_error("Cannot shoot a dead character.");
         if (!isAlive())
             throw std::runtime_error("Cannot shoot with a dead character.");
-        if(other == this)
+        if (other == this)
             throw std::runtime_error("Cannot shoot yourself.");
         if (bullets > 0)
         {
@@ -18,10 +18,7 @@ namespace ariel
         }
     }
 
-    bool Cowboy::hasboolets()
-    {
-        return bullets > 0;
-    }
+    bool Cowboy::hasboolets() { return bullets > 0; }
 
     void Cowboy::reload()
     {

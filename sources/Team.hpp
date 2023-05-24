@@ -11,21 +11,28 @@ namespace ariel
 {
     class Team
     {
-    private:
+    protected:
         Character *leader;
         vector<Character *> members;
         int size;
 
     public:
+        // getters, setters, c'tors, d'tors
         Team(Character *leader);
-        virtual ~Team();
+        ~Team();
+        int getSize() { return size; }
+        Character *getLeader() { return leader; }
+        vector<Character *> &getMembers() { return members; }
+
+    public:
+        // methods
+        int stillAlive();
         void add(Character *new_char);
         void virtual attack(Team *other);
-        Character *closestEnemy(Team *Other);
-        int stillAlive();
         void virtual print();
         void leaderDead();
-        Character *findClosestMember(Character *leader, std::vector<Character *> &members);
+        Character *closestEnemy(Team *Other);
+        Character *findEnemy(Character *leader, std::vector<Character *> &members);
     };
 
     class SmartTeam : public Team
@@ -33,5 +40,6 @@ namespace ariel
     public:
         SmartTeam(Character *leader) : Team(leader) {}
         void attack(Team *Other);
+        void print();
     };
 };
