@@ -1,8 +1,5 @@
 #include "Team.hpp"
-#include <stdexcept>
-#include <limits>
-#include <iostream>
-#include <algorithm>
+
 namespace ariel
 {
     Team::Team(Character *leader) : leader(leader)
@@ -23,13 +20,10 @@ namespace ariel
     }
     void Team::add(Character *new_char)
     {
-        // cowboys first than ninjas
         if (new_char->getInGame())
             throw std::runtime_error("Character is already in a team");
-
         if (size >= MAX_SIZE)
             throw std::runtime_error("Team is full");
-
         members.push_back(new_char);
         new_char->setInGame(true);
         size++;
@@ -66,7 +60,6 @@ namespace ariel
             if (leader == nullptr)
                 return;
         }
-
         if (other->stillAlive() > 0 && stillAlive() > 0)
         {
             Character *closestEnemy = nullptr;
@@ -103,8 +96,7 @@ namespace ariel
 
     void Team::print()
     {
-        std::cout << "Team Leader: " << leader->getName() << std::endl;
-        std::cout << "Team Members: " << std::endl;
+        std::cout << "Team Leader: " << leader->getName() << "Team Members: " << std::endl;
         for (vector<Character *>::size_type i = 0; i < members.size(); i++)
         {
             std::cout << members[i]->getName() << "," << members[i]->getLocation().getX() << "," << members[i]->getLocation().getY() << std::endl;
