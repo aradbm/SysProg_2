@@ -1,88 +1,48 @@
-/**
- * Demo file for the exercise on binary tree
- *
- * @author Evgeny Hershkovitch Neiterman
- * @since 2023-03
- */
-
 #include <iostream>
-#include <fstream>
-#include <sstream>
-#include <stdexcept>
-#include <cassert>
-using namespace std;
-
-#include "sources/Team.hpp" //no need for other includes
-
-using namespace ariel;
-
-void normalRun()
-{
-   Point a(32.3, 44), b(1.3, 3.5);
-   assert(a.distance(b) == b.distance(a));
-   Cowboy *tom = new Cowboy("Tom", a);
-   OldNinja *sushi = new OldNinja("sushi", b);
-   tom->shoot(sushi);
-   cout << tom->print() << endl;
-
-   sushi->move(tom);
-   sushi->slash(tom);
-
-   Team team_A(tom);
-   team_A.add(new YoungNinja("Yogi", Point(64, 57)));
-
-   Team team_B(sushi);
-   team_B.add(new TrainedNinja("Hikari", Point(12, 81)));
-
-   while (team_A.stillAlive() > 0 && team_B.stillAlive() > 0)
-   {
-      team_A.attack(&team_B);
-      team_B.attack(&team_A);
-      team_A.print();
-      team_B.print();
-   }
-
-   if (team_A.stillAlive() > 0)
-      cout << "winner is team_A" << endl;
-   else
-      cout << "winner is team_B" << endl;
-}
-
-void smartRun()
-{
-   Point a(32.3, 44), b(1.3, 3.5);
-   assert(a.distance(b) == b.distance(a));
-   Cowboy *tom = new Cowboy("Tom", a);
-   OldNinja *sushi = new OldNinja("sushi", b);
-   tom->shoot(sushi);
-   cout << tom->print() << endl;
-
-   sushi->move(tom);
-   sushi->slash(tom);
-
-   SmartTeam team_A(tom);
-   team_A.add(new YoungNinja("Yogi", Point(64, 57)));
-
-   Team team_B(sushi);
-   team_B.add(new TrainedNinja("Hikari", Point(12, 81)));
-
-   while (team_A.stillAlive() > 0 && team_B.stillAlive() > 0)
-   {
-      team_A.attack(&team_B);
-      team_B.attack(&team_A);
-      team_A.print();
-      team_B.print();
-   }
-
-   if (team_A.stillAlive() > 0)
-      cout << "winner is team_A" << endl;
-   else
-      cout << "winner is team_B" << endl;
-}
-
+#include "sources/MagicalContainer.h"
 int main()
 {
-   normalRun();
-   smartRun();
-   return 0; // no memory issues. Team should free the memory of its members. both a and b teams are on the stack.
+    // Create a MagicalContainer and add some elements
+    MagicalContainer container;
+    container.addElement(17);
+    container.addElement(2);
+    container.addElement(25);
+    container.addElement(9);
+    container.addElement(3);
+
+    // Print container size
+    std::cout << "Size of container: " << container.size() << std::endl;
+
+    // Use AscendingIterator to display elements in ascending order
+    std::cout << "Elements in ascending order:\n";
+    AscendingIterator ascIter(container);
+    for (auto it = ascIter.begin(); it != ascIter.end(); ++it)
+    {
+        std::cout << *it << ' '; // 2 3 9 17 25
+    }
+    std::cout << std::endl;
+
+    // Use DescendingIterator to display elements in descending order
+    std::cout << "Elements in cross order:\n";
+    SideCrossIterator crossIter(container);
+    for (auto it = crossIter.begin(); it != crossIter.end(); ++it)
+    {
+        std::cout << *it << ' '; // 2 25 3 17 9
+    }
+    std::cout << std::endl;
+
+    // Use PrimeIterator to display prime numbers only
+    std::cout << "Prime numbers:\n";
+    PrimeIterator primeIter(container);
+    for (auto it = primeIter.begin(); it != primeIter.end(); ++it)
+    {
+        std::cout << *it << ' '; // 2 3 17
+    }
+    std::cout << std::endl;
+
+    // Remove an element from the container and display the size
+    container.removeElement(9);
+    std::cout << "Size of container after removing an element: " << container.size() << std::endl;
+
+    return 0;
 }
