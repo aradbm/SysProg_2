@@ -2,8 +2,6 @@
 
 namespace ariel
 {
-    // MagicalContainer
-
     void MagicalContainer::addElement(int element)
     {
         elements.push_back(element);
@@ -11,14 +9,10 @@ namespace ariel
 
     void MagicalContainer::removeElement(int element)
     {
-        auto position = std::find(elements.begin(), elements.end(), element);
-        if (position != elements.end())
+        auto it = std::find(elements.begin(), elements.end(), element);
+        if (it != elements.end())
         {
-            elements.erase(position);
-        }
-        else
-        {
-            throw std::runtime_error("Element not found in the container.");
+            elements.erase(it);
         }
     }
 
@@ -26,155 +20,60 @@ namespace ariel
     {
         return elements.size();
     }
+    //----------------------------------------------------------------------------------------------
+    MagicalContainer::AscendingIterator::AscendingIterator(MagicalContainer &container) : container(container), currentIndex(0) {}
 
-    // AscendingIterator
-
-    MagicalContainer::AscendingIterator::AscendingIterator(MagicalContainer &container) : container(container)
+    int &MagicalContainer::AscendingIterator::operator*() const
     {
-        if (!container.elements.empty())
-        {
-            std::sort(container.elements.begin(), container.elements.end());
-            current = container.elements.data();
-        }
-        else
-        {
-            current = nullptr;
-        }
+        return container.elements[currentIndex];
     }
 
-    int *MagicalContainer::AscendingIterator::begin()
+    bool MagicalContainer::AscendingIterator::operator==(const Iterator &other) const
     {
-        return container.elements.empty() ? nullptr : &container.elements.front();
+        const AscendingIterator *other_iter = dynamic_cast<const AscendingIterator *>(&other);
+        if (other_iter == nullptr)
+        {
+            throw std::runtime_error("Cannot compare iterators of different types");
+        }
+        if (&container != &other_iter->container)
+        {
+            throw std::runtime_error("Cannot compare iterators of different containers");
+        }
+        return currentIndex == other_iter->currentIndex;
     }
 
-    int *MagicalContainer::AscendingIterator::end()
+    bool MagicalContainer::AscendingIterator::operator!=(const Iterator &other) const
     {
-        return container.elements.empty() ? nullptr : &container.elements.back() + 1;
+        return !(*this == other);
     }
 
     Iterator &MagicalContainer::AscendingIterator::operator++()
     {
-        if (current == nullptr)
-            throw std::runtime_error("Iterator is not initialized.");
-        if (current == end())
-            throw std::runtime_error("Iterator is at the end of the container.");
-        if (current != nullptr)
+        if (currentIndex < container.size())
         {
-            ++current;
-            if (current == end())
-            {
-                current = end();
-            }
-        }
-        return *this;
-    }
-    // SideCrossIterator
-
-    MagicalContainer::SideCrossIterator::SideCrossIterator(MagicalContainer &container) : container(container)
-    {
-        if (!container.elements.empty())
-        {
-            current = container.elements.data();
-        }
-        else
-        {
-            current = nullptr;
-        }
-    }
-
-    int *MagicalContainer::SideCrossIterator::begin()
-    {
-        return container.elements.empty() ? nullptr : container.elements.data();
-    }
-
-    int *MagicalContainer::SideCrossIterator::end()
-    {
-        return container.elements.empty() ? nullptr : container.elements.data() + container.size();
-    }
-
-    Iterator &MagicalContainer::SideCrossIterator::operator++()
-    {
-        if (current == nullptr)
-            throw std::runtime_error("Iterator is not initialized.");
-
-        if (current == end())
-            throw std::runtime_error("Iterator is at the end of the container.");
-
-        if (current != nullptr)
-        {
-            if (current == container.elements.data())
-            {
-                current++;
-            }
-            else if (current == container.elements.data() + container.size() - 1)
-            {
-                current--;
-            }
-            else
-            {
-                int distanceFromBegin = current - container.elements.data();
-                int distanceFromEnd = (container.elements.data() + container.size() - 1) - current;
-
-                if (distanceFromBegin <= distanceFromEnd)
-                {
-                    current = container.elements.data() + container.size() - 1 - distanceFromBegin;
-                }
-                else
-                {
-                    current = container.elements.data() + distanceFromEnd + 1;
-                }
-            }
+            ++currentIndex;
         }
         return *this;
     }
 
-    // PrimeIterator
-
-    MagicalContainer::PrimeIterator::PrimeIterator(MagicalContainer &container) : container(container)
+    bool MagicalContainer::AscendingIterator::operator<(const Iterator &other) const
     {
-        current = begin();
-    }
-
-    bool MagicalContainer::PrimeIterator::isPrime(int number)
-    {
-        if (number <= 1)
-            return false;
-        for (int i = 2; i * i <= number; i++)
+        const AscendingIterator *other_ptr = dynamic_cast<const AscendingIterator *>(&other);
+        if (other_ptr == nullptr)
         {
-            if (number % i == 0)
-                return false;
+            throw std::runtime_error("Cannot compare iterators of different types");
         }
-        return true;
-    }
-
-    int *MagicalContainer::PrimeIterator::begin()
-    {
-        for (int *p = container.elements.data(); p != end(); p++)
+        if (&container != &other_ptr->container)
         {
-            if (isPrime(*p))
-                return p;
+            throw std::runtime_error("Cannot compare iterators of different containers");
         }
-        return end();
+        return currentIndex < other_ptr->currentIndex;
     }
 
-    int *MagicalContainer::PrimeIterator::end()
+    bool MagicalContainer::AscendingIterator::operator>(const Iterator &other) const
     {
-        return container.elements.data() + container.size();
+        return !(*this < other) && !(*this == other);
     }
 
-    Iterator &MagicalContainer::PrimeIterator::operator++()
-    {
-        if (current == nullptr)
-            throw std::runtime_error("Iterator is not initialized.");
-        if (current == end())
-            throw std::runtime_error("Iterator is at the end of the container.");
-
-        current++;
-        while (current != end() && !isPrime(*current))
-        {
-            current++;
-        }
-        return *this;
-    }
-
+    //----------------------------------------------------------------------------------------------
 }
